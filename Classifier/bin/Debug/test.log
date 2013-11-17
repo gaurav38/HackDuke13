@@ -1,0 +1,42 @@
+GRT_LABELLED_TIME_SERIES_CLASSIFICATION_DATA_FILE_V1.0
+DatasetName: MouseTimeSeriesData
+InfoText: This dataset contains 2 mouse timeseries gestures, writing the letters G, R, and T.  There are 15 recording of each gesture. G is class 1, R is class 2, and T is class 3.
+NumDimensions: 3
+TotalNumTrainingExamples: 2
+NumberOfClasses: 1
+ClassIDsAndCounters: 
+1	2
+UseExternalRanges: 0
+LabelledTimeSeriesTrainingData:
+************TIME_SERIES************
+ClassID: 1
+TimeSeriesLength: 16
+TimeSeriesData:
+-228	-250	-980
+-226	-250	-890
+-200	-246	-756
+-126	-182	-492
+76	22	-500
+308	54	-728
+866	-74	-1112
+968	-250	-1120
+870	-38	-1064
+828	-152	-650
+916	-54	-466
+892	-66	-524
+914	-24	-476
+902	-18	-444
+860	18	-432
+862	26	-446
+************TIME_SERIES************
+ClassID: 1
+TimeSeriesLength: 8
+TimeSeriesData:
+-138	-66	-992
+-130	-82	-956
+-148	-84	-960
+-110	-104	-846
+-82	-110	-778
+-6	-82	-822
+72	-22	-898
+198	60	-934

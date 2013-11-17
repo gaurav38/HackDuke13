@@ -1,0 +1,92 @@
+GRT_DTW_Model_File_V1.0
+NumberOfDimensions: 3
+NumberOfClasses: 3
+NumberOfTemplates: 3
+DistanceMethod: 1
+UseNullRejection: 0
+UseSmoothing: 0
+SmoothingFactor: 5
+UseScaling: 0
+UseZNormalisation: 0
+OffsetUsingFirstSample: 0
+ConstrainWarpingPath: 1
+Radius: 0.2
+RejectionMode: 0
+NullRejectionCoeff: 3
+OverallAverageTemplateLength: 14
+Template: 1
+ClassLabel: 1
+TimeSeriesLength: 13
+TemplateThreshold: 1401.48
+TrainingMu: 776.928
+TrainingSigma: 208.182
+AverageTemplateLength: 12
+TimeSeries: 
+14	-192	-962	
+-12	-214	-954	
+2	-214	-962	
+4	-204	-930	
+-12	-192	-868	
+64	-132	-724	
+144	-106	-656	
+398	-88	-798	
+548	-42	-884	
+696	-88	-878	
+788	-68	-774	
+884	46	-684	
+932	12	-656	
+***************************
+
+Template: 2
+ClassLabel: 3
+TimeSeriesLength: 15
+TemplateThreshold: 528.131
+TrainingMu: 233.814
+TrainingSigma: 98.1055
+AverageTemplateLength: 19
+TimeSeries: 
+970	8	-102	
+974	8	-98	
+952	8	-98	
+964	14	-100	
+954	-4	-108	
+970	4	-116	
+966	16	-110	
+972	20	-104	
+970	16	-120	
+950	-4	-118	
+974	0	-104	
+968	2	-102	
+972	14	-126	
+986	4	-100	
+972	16	-100	
+***************************
+
+Template: 3
+ClassLabel: 2
+TimeSeriesLength: 18
+TemplateThreshold: 2981.7
+TrainingMu: 1594.93
+TrainingSigma: 462.257
+AverageTemplateLength: 13
+TimeSeries: 
+906	232	-250	
+894	226	-252	
+884	248	-252	
+872	358	-296	
+904	236	-326	
+958	256	-550	
+1052	194	-724	
+1070	204	-718	
+922	228	-660	
+630	216	-664	
+330	62	-800	
+144	-36	-802	
+-22	-50	-794	
+-102	-100	-820	
+-178	-120	-834	
+-212	-126	-836	
+-230	-176	-896	
+-254	-178	-916	
+***************************
+

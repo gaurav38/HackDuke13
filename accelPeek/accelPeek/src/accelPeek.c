@@ -1,0 +1,172 @@
+#include <pebble.h>
+
+
+static Window *window;
+static TextLayer *text_layer;
+static AppTimer *timer;
+
+
+char *itoa(int num)
+{
+static char buff[20] = {};
+int i = 0, temp_num = num, length = 0;
+char *string = buff;
+if(num >= 0) {
+// count how many characters in the number
+while(temp_num) {
+temp_num /= 10;
+length++;
+}
+// assign the number to the buffer starting at the end of the 
+// number and going to the begining since we are doing the
+// integer to character conversion on the last number in the
+// sequence
+for(i = 0; i < length; i++) {
+buff[(length-1)-i] = '0' + (num % 10);
+num /= 10;
+}
+buff[i] = '\0'; // can't forget the null byte to properly end our string
+}
+else
+return "Unsupported Number";
+return string;
+}
+
+static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(text_layer, "Select");
+}
+
+static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(text_layer, "Up");
+}
+
+static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(text_layer, "Down");
+}
+
+static void click_config_provider(void *context) {
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+}
+
+static void timer_callback(void *data) {
+  AccelData accel = { 0, 0, 0 };
+
+  DictionaryIterator *iter;
+  app_message_outbox_begin(&iter);
+
+  accel_service_peek(&accel);
+
+//  int j=0;	
+ /* Tuplet value = TupletInteger(0, accel.x);
+  dict_write_tuplet(iter, &value);
+ // j++;
+  Tuplet value1 = TupletInteger(1, accel.y);
+  dict_write_tuplet(iter, &value1);
+ // j++;
+  Tuplet value2 = TupletInteger(2, accel.z);
+  dict_write_tuplet(iter, &value2);  
+*/
+  Tuplet tuplets[3] = {  TupletInteger(0, accel.x), TupletInteger(1, accel.y), TupletInteger(2, accel.z)};
+
+  dict_write_tuplet(iter, &tuplets[0]); 	
+  dict_write_tuplet(iter, &tuplets[1]); 	
+  dict_write_tuplet(iter, &tuplets[2]); 	
+
+//  uint32_t size = app_message_outbox_size_maximum();
+  
+  uint32_t size = dict_calc_buffer_size_from_tuplets(tuplets, 3);
+
+  app_message_outbox_send();
+
+  //app_message_outbox_release();
+
+  //uint32_t size = dict_calc_buffer_size(1);
+
+  text_layer_set_text(text_layer, itoa(size));
+
+  timer = app_timer_register(100 /* milliseconds */, timer_callback, NULL);
+}
+
+void out_sent_handler(DictionaryIterator *sent, void *context) {
+   // outgoing message was delivered
+ }
+
+
+ void out_fail_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
+   // outgoing message failed
+ }
+
+
+ void in_received_handler(DictionaryIterator *received, void *context) {
+   // incoming message received
+ }
+
+
+ void in_dropped_handler(AppMessageResult reason, void *context) {
+   // incoming message dropped
+ }
+
+static void handle_accel(AccelData *accel_data, uint32_t num_samples) {
+  // do nothing
+}
+
+static void window_load(Window *window) {
+  Layer *window_layer = window_get_root_layer(window);
+  GRect bounds = layer_get_bounds(window_layer);
+
+  //uint32_t size = app_message_outbox_size_maximum(); 
+
+  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 20 } });
+  //text_layer_set_text(text_layer, /*"Press a button"*/itoa(size));
+  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
+  layer_add_child(window_layer, text_layer_get_layer(text_layer));
+}
+
+static void window_unload(Window *window) {
+  text_layer_destroy(text_layer);
+}
+
+
+static void init(void) {
+  window = window_create();
+  window_set_click_config_provider(window, click_config_provider);
+  window_set_window_handlers(window, (WindowHandlers) {
+    .load = window_load,
+    .unload = window_unload,
+  });
+  const bool animated = true;
+  window_stack_push(window, animated);
+
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED); 
+ // tuplets = (Tuplet *) malloc ((sizeof  (Tuplet))*3) ;
+  accel_data_service_subscribe(0, handle_accel);
+
+  app_message_register_inbox_received(in_received_handler);
+  app_message_register_inbox_dropped(in_dropped_handler);
+  app_message_register_outbox_sent(out_sent_handler);
+  app_message_register_outbox_failed(out_fail_handler);
+  
+  const uint32_t inbound_size = 64;
+  const uint32_t outbound_size = 64;
+
+  app_message_open(inbound_size, outbound_size);
+
+  timer = app_timer_register(100 /* milliseconds */, timer_callback, NULL);
+}
+
+static void deinit(void) {
+  accel_data_service_unsubscribe();
+  app_message_deregister_callbacks();
+  window_destroy(window);
+}
+
+int main(void) {
+  init();
+
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Done initializing, pushed window: %p", window);
+
+  app_event_loop();
+  deinit();
+}

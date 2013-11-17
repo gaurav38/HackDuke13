@@ -1,0 +1,17 @@
+{
+  "uuid": "729dfbcc-9160-4c5b-92c6-72efeeb2c20b",
+  "shortName": "accelPeek",
+  "longName": "accelPeek",
+  "companyName": "MakeAwesomeHappen",
+  "versionCode": 2,
+  "versionLabel": "2.0.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
